@@ -42,6 +42,8 @@ def predict_price():
     try:
         mileage_str = input("Please enter a mileage: ")
         mileage = float(mileage_str)
+        if mileage < 0:
+            raise ValueError("Mileage cannot be negative.")
     except ValueError:
         print("Error: Invalid mileage. Please enter a valid number.")
         sys.exit(1)

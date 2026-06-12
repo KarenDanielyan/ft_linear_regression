@@ -15,13 +15,24 @@ import os
 import sys
 
 
-def predict_price():
+def predict_price(mileage, theta0=0.0, theta1=0.0, norm_min=0.0, norm_max=1.0):
+    # Normalize the input mileage
+    if norm_max - norm_min != 0:
+        normalized_mileage = (mileage - norm_min) / (norm_max - norm_min)
+    else:
+        normalized_mileage = 0.0
+
+    # Predict price
+    estimated_price = theta0 + (theta1 * normalized_mileage)
+    return estimated_price
+
+
+if __name__ == "__main__":
+    model_file = "model.json"
     theta0 = 0.0
     theta1 = 0.0
     norm_min = 0.0
     norm_max = 1.0
-
-    model_file = "model.json"
 
     if not os.path.exists(model_file):
         print("Warning: model.json not found. Assuming theta0 = 0 and theta1 = 0.")
@@ -38,7 +49,6 @@ def predict_price():
         except Exception as e:
             print(f"Warning: Could not read {model_file} correctly. Error: {e}")
             print("Assuming theta0 = 0 and theta1 = 0.")
-
     try:
         mileage_str = input("Please enter a mileage: ")
         mileage = float(mileage_str)
@@ -53,20 +63,5 @@ def predict_price():
     except KeyboardInterrupt:
         print("\nExiting...")
         sys.exit(0)
-
-    # Normalize the input mileage
-    if norm_max - norm_min != 0:
-        normalized_mileage = (mileage - norm_min) / (norm_max - norm_min)
-    else:
-        normalized_mileage = 0.0
-
-    # Predict price
-    estimated_price = theta0 + (theta1 * normalized_mileage)
-
-    # We only format to round to reasonable decimal,
-    # or just let python print float
+    estimated_price = predict_price(mileage, theta0, theta1, norm_min, norm_max)
     print(f"The estimated price for {mileage} mileage is: {estimated_price}")
-
-
-if __name__ == "__main__":
-    predict_price()

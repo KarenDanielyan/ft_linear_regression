@@ -11,6 +11,8 @@
 # **************************************************************************** #
 
 # Imports
+import json
+
 import numpy as np
 import pandas as pd
 
@@ -55,4 +57,12 @@ if __name__ == "__main__":
             theta_1 = theta_1 - tmp_theta_1
     print("Training complete")
     print(f"theta_0: {theta_0}, theta_1: {theta_1}")
-    # Save theta in a file
+    # Save thetas in a file
+    model_data = {
+        "theta_0": f"{theta_0:.6f}",
+        "theta_1": f"{theta_1:.6f}",
+        "norm_min": f"{min_val}",
+        "norm_max": f"{max_val}",
+    }
+    with open("model.json", "w") as f:
+        json.dump(model_data, f)
